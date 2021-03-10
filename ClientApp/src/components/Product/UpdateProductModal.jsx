@@ -65,7 +65,7 @@ const UpdateProductModal = (props) => {
               <input
                 placeholder="Please Enter Price"
                 onChange={(e) => setprice(e.target.value)}
-                value={product.address}
+                value={product.price}
               />
             </Form.Field>
           </Form>

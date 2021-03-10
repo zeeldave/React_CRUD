@@ -36,24 +36,23 @@ const NewSalesModal = (props) => {
     }
   };
 
-const resetNewSalesData=()=>{
-  setproduct(null)
-  setcustomer(null)
-  setstore(null)
-}
+  const resetNewSalesData = () => {
+    setproduct(null);
+    setcustomer(null);
+    setstore(null);
+  };
 
-const resetNewSalesDataOnCancel=()=>{
-  resetNewSalesData();
-  toggleModal();
-}
+  const resetNewSalesDataOnCancel = () => {
+    resetNewSalesData();
+    toggleModal();
+  };
 
-useEffect(() => {
- console.log(productId,customerId,storeId,startDate);
- return()=>{
-  console.log(productId,customerId,storeId,startDate);
- }
-})
-
+  useEffect(() => {
+    console.log(productId, customerId, storeId, startDate);
+    return () => {
+      console.log(productId, customerId, storeId, startDate);
+    };
+  });
 
   if (customers && products && stores) {
     console.log(Sales);
@@ -75,8 +74,6 @@ useEffect(() => {
               /> */}
             </Form.Field>
 
-
-
             <Form.Field required>
               <label>Customer</label>
 
@@ -95,12 +92,13 @@ useEffect(() => {
               /> */}
 
               <select
-              placeholder="Select Customer"
-              fluid
-              selection
+                placeholder="Select Customer"
+                fluid
+                selection
                 className="ui dropdown"
                 onChange={(e) => setcustomer(e.target.value)}
               >
+                <option value=""> </option>
                 {customers.map((c) => {
                   return <option value={c.id}>{c.name}</option>;
                 })}
@@ -125,16 +123,18 @@ useEffect(() => {
                 onChange={(e) => setproduct(e.target.value)}
               /> */}
 
-              <select placeholder="Select Product"
+              <select
+                placeholder="Select Product"
                 className="ui dropdown"
                 onChange={(e) => setproduct(e.target.value)}
               >
+                 <option value=""> </option>
                 {products.map((p) => {
                   return <option value={p.id}>{p.name}</option>;
                 })}
               </select>
             </Form.Field>
-          
+
             <Form.Field required>
               <label>Store</label>
 
@@ -153,11 +153,12 @@ useEffect(() => {
                 onChange={(e) => setstore(e.target.value)}
               /> */}
 
-              <select 
-              placeholder="Select Store"
+              <select
+                placeholder="Select Store"
                 className="ui dropdown"
                 onChange={(e) => setstore(e.target.value)}
               >
+                 <option value=""> </option>
                 {stores.map((s) => {
                   return <option value={s.id}>{s.name}</option>;
                 })}

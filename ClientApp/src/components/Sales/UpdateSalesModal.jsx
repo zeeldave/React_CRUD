@@ -22,8 +22,9 @@ const UpdateCustomerModal = (props) => {
       setproduct(sale.productId);
       setcustomer(sale.customerId);
       setstore(sale.storeId);
-      // setStartDate(sale.startDate);
+      setStartDate(sale.startDate);
       setloaded(true);
+      console.log(productId,customerId,storeId,startDate);
     }
     console.log()
   });
@@ -38,12 +39,12 @@ const UpdateCustomerModal = (props) => {
     toggleModal();
   };
 
-  useEffect(() => {
-    console.log(productId,customerId,storeId,startDate);
-    return()=>{
-     console.log(productId,customerId,storeId,startDate);
-    }
-   })
+  // useEffect(() => {
+  //   console.log(productId,customerId,storeId,startDate);
+  //   return()=>{
+  //    console.log(productId,customerId,storeId,startDate);
+  //   }
+  //  })
 
   const updateSales = (id) => {
     if (sale == undefined) {
@@ -81,6 +82,7 @@ const UpdateCustomerModal = (props) => {
             <label>Date of Sold</label>
               <DatePicker
                 selected={startDate}
+                defaultValue={sale.startDate}
                 onChange={(date) => setStartDate(date)}
               />
             </Form.Field>
@@ -92,8 +94,10 @@ const UpdateCustomerModal = (props) => {
               fluid
               selection
                 className="ui dropdown"
+                defaultValue={sale.customerId}
                 onChange={(e) => setcustomer(e.target.value)}
               >
+               
                 {customers.map((c) => {
                   return <option value={c.id}>{c.name}</option>;
                 })}
@@ -108,6 +112,7 @@ const UpdateCustomerModal = (props) => {
               <label>Product</label>
               <select placeholder="Select Product"
                 className="ui dropdown"
+                defaultValue={sale.productId}
                 onChange={(e) => setproduct(e.target.value)}
               >
                 {products.map((p) => {
@@ -127,6 +132,7 @@ const UpdateCustomerModal = (props) => {
               <select 
               placeholder="Select Store"
                 className="ui dropdown"
+                defaultValue={sale.storeId}
                 onChange={(e) => setstore(e.target.value)}
               >
                 {stores.map((s) => {
