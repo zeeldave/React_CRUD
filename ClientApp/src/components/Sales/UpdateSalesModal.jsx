@@ -22,7 +22,7 @@ const UpdateCustomerModal = (props) => {
       setproduct(sale.productId);
       setcustomer(sale.customerId);
       setstore(sale.storeId);
-      setStartDate(sale.startDate);
+      setStartDate(startDate);
       setloaded(true);
       console.log(productId,customerId,storeId,startDate);
     }
@@ -34,7 +34,7 @@ const UpdateCustomerModal = (props) => {
     setproduct();
     setcustomer();
     setstore();
-    setStartDate();
+    // setStartDate();
     setloaded(false);
     toggleModal();
   };
@@ -82,7 +82,7 @@ const UpdateCustomerModal = (props) => {
             <label>Date of Sold</label>
               <DatePicker
                 selected={startDate}
-                defaultValue={sale.startDate}
+                // defaultValue={sale.startDate}
                 onChange={(date) => setStartDate(date)}
               />
             </Form.Field>
