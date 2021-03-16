@@ -14,6 +14,7 @@ namespace React_CRUD.Models
         public int CustomerId { get; set; }
         public int StoreId { get; set; }
         public DateTime SoldDate { get; set; }
+        public string SoldDateFor { get; set; }
 
         public virtual Customer Customer { get; set; }
         public virtual Product Product { get; set; }

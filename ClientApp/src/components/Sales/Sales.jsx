@@ -8,9 +8,11 @@ import {
   Loader,
   Image,
   Segment,
+  Pagination,
 } from "semantic-ui-react";
 import NewSalesModal from "./NewSalesModal";
 import UpdateSalesModal from "./UpdateSalesModal";
+import DeleteSalesModal from "./DeleteSalesModal";
 
 export class Sales extends Component {
   constructor(props) {
@@ -20,13 +22,17 @@ export class Sales extends Component {
       loaded: false,
       openCreateModal: false,
       openUpdateModal: false,
+      openDeleteModal: false,
       sale: {},
       customers: [],
       customer: {},
       products: [],
       product: {},
-      stores:[],
-      store:{}
+      stores: [],
+      store: {},
+      totalSalesRec: 0,
+      currentPage: 1,
+      totalPages: 1,
     };
   }
 
@@ -35,7 +41,6 @@ export class Sales extends Component {
     this.fetchCustomerData();
     this.fetchProductData();
     this.fetchStoreData();
-
   }
 
   fetchData = () => {
@@ -46,7 +51,19 @@ export class Sales extends Component {
         this.setState({
           sales: res.data,
           loaded: true,
+          totalSalesRec: res.data.length,
+          totalPages: Math.ceil(res.data.length / 3),
         });
+        if (
+          res.data.length % 3 == 0 &&
+          this.state.currentPage > Math.ceil(res.data.length / 3)
+        ) {
+          console.log("Last Page = Current page");
+          this.setState({
+            currentPage:
+              this.state.currentPage == 1 ? 1 : this.state.currentPage - 1,
+          });
+        }
       })
       .catch((error) => {
         console.log(error);
@@ -98,25 +115,36 @@ export class Sales extends Component {
       });
   };
 
-
   toggleModal = () => {
     this.setState({
       openCreateModal: !this.state.openCreateModal,
     });
   };
 
-  deleteSales = (id) => {
-    axios
-      .delete(`/Sales/DeleteSales/${id}`)
-      .then((res) => {
-        console.log(res);
-        alert("Sales record Deleted..!");
-        this.fetchData();
-      })
-      .catch((err) => {
-        console.log(err);
-      });
+  toggleDeleteModal = () => {
+    this.setState({
+      openDeleteModal: !this.state.openDeleteModal,
+    });
+    console.log("Sales:toggleDeleteModal");
   };
+
+  setStateDeleteModal = (sale) => {
+    this.setState({ sale: sale });
+    this.toggleDeleteModal();
+  };
+
+  // deleteSales = (id) => {
+  //   axios
+  //     .delete(`/Sales/DeleteSales/${id}`)
+  //     .then((res) => {
+  //       console.log(res);
+  //       alert("Sales record Deleted..!");
+  //       this.fetchData();
+  //     })
+  //     .catch((err) => {
+  //       console.log(err);
+  //     });
+  // };
 
   toggleUpdateModal = (sale) => {
     this.setState({
@@ -125,16 +153,26 @@ export class Sales extends Component {
     });
   };
 
+  pageChange = (e, pagData) => {
+    this.setState({
+      currentPage: pagData.activePage,
+      totalPages: pagData.totalPages,
+    });
+    console.log(pagData);
+  };
+
   render() {
     const sales = this.state.sales;
     const loaded = this.state.loaded;
     const openCreateModal = this.state.openCreateModal;
     const openUpdateModal = this.state.openUpdateModal;
+    const openDeleteModal = this.state.openDeleteModal;
     const sale = this.state.sale;
     const products = this.state.products;
-    const customers=this.state.customers;
-    const stores=this.state.stores;
-
+    const customers = this.state.customers;
+    const stores = this.state.stores;
+    const totalSalesRec = this.state.totalSalesRec;
+    const currentPage = this.state.currentPage;
 
     if (loaded) {
       return (
@@ -158,6 +196,16 @@ export class Sales extends Component {
             stores={stores}
           />
 
+          <DeleteSalesModal
+            open={openDeleteModal}
+            toggleDeleteModal={this.toggleDeleteModal}
+            fetchData={this.fetchData}
+            sale={sale}
+            customers={customers}
+            products={products}
+            stores={stores}
+          />
+
           <h1>Sales</h1>
           <Button color="blue" onClick={this.toggleModal}>
             Create New Sales
@@ -174,39 +222,52 @@ export class Sales extends Component {
             </Table.Header>
 
             <Table.Body>
-              {sales.map((s) => {
-                return (
-                  <Table.Row key={s.id}>
-                    <Table.Cell>{s.customer.name}</Table.Cell>
-                    <Table.Cell>{s.product.name}</Table.Cell>
-                    <Table.Cell>{s.store.name}</Table.Cell>
-                    <Table.Cell>{s.soldDate}</Table.Cell>
+              {sales.map((s, index) => {
+                if (index >= currentPage * 3 - 3 && index < currentPage * 3) {
+                  console.log("inside if: " + index);
+                  return (
+                    <Table.Row key={s.id}>
+                      <Table.Cell>{s.customer.name}</Table.Cell>
+                      <Table.Cell>{s.product.name}</Table.Cell>
+                      <Table.Cell>{s.store.name}</Table.Cell>
+                      <Table.Cell>{s.soldDateFor}</Table.Cell>
 
-                    <Table.Cell>
-                      <Button
-                        icon
-                        labelPosition="left"
-                        color="yellow"
-                        onClick={() => this.toggleUpdateModal(s)}
-                      >
-                        <Icon name="edit" />
-                        Update
-                      </Button>
-                      <Button
-                        icon
-                        labelPosition="right"
-                        color="red"
-                        onClick={() => this.deleteSales(s.id)}
-                      >
-                        Delete
-                        <Icon name="trash" />
-                      </Button>
-                    </Table.Cell>
-                  </Table.Row>
-                );
+                      <Table.Cell>
+                        <Button
+                          icon
+                          labelPosition="left"
+                          color="yellow"
+                          onClick={() => this.toggleUpdateModal(s)}
+                        >
+                          <Icon name="edit" />
+                          Update
+                        </Button>
+                        <Button
+                          icon
+                          labelPosition="right"
+                          color="red"
+                          onClick={() => this.setStateDeleteModal(s)}
+                        >
+                          Delete
+                          <Icon name="trash" />
+                        </Button>
+                      </Table.Cell>
+                    </Table.Row>
+                  );
+                }
               })}
             </Table.Body>
           </Table>
+          <Pagination
+            boundaryRange={0}
+            activePage={currentPage}
+            ellipsisItem={null}
+            firstItem={null}
+            lastItem={null}
+            siblingRange={1}
+            totalPages={Math.ceil(totalSalesRec / 3)}
+            onPageChange={(e, pagData) => this.pageChange(e, pagData)}
+          />
         </div>
       );
     } else {

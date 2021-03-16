@@ -57,6 +57,11 @@ namespace React_CRUD.Models
             {
                 entity.Property(e => e.SoldDate).HasColumnType("date");
 
+                entity.Property(e => e.SoldDateFor)
+                    .HasMaxLength(20)
+                    .IsUnicode(false)
+                    .HasComputedColumnSql("(CONVERT([varchar](20),[SoldDate],(106)))");
+
                 entity.HasOne(d => d.Customer)
                     .WithMany(p => p.Sales)
                     .HasForeignKey(d => d.CustomerId)

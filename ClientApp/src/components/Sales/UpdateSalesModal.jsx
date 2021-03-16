@@ -12,7 +12,7 @@ const UpdateCustomerModal = (props) => {
   // const [date, setdate] = useState();
   const [loaded, setloaded] = useState(false);
   const [startDate, setStartDate] = useState(new Date());
-
+const dd = new Date(sale.soldDate);
   useEffect(() => {
     if (
       Object.keys(sale).length !== 0 &&
@@ -22,9 +22,9 @@ const UpdateCustomerModal = (props) => {
       setproduct(sale.productId);
       setcustomer(sale.customerId);
       setstore(sale.storeId);
-      setStartDate(startDate);
+      setStartDate(dd);
       setloaded(true);
-      console.log(productId,customerId,storeId,startDate);
+      console.log(productId,customerId,storeId,startDate,dd);
     }
     console.log()
   });
