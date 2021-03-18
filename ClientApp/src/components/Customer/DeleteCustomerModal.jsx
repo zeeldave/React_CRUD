@@ -6,7 +6,7 @@ const DeleteCustomerModal = (props) => {
   const { open, toggleDeleteModal, fetchData, customer } = props;
 
   const deleteCustomer = (id) => {
-    alert("If Customer is existing in Sales can't get Deleted..!");
+    // alert("If Customer is existing in Sales can't get Deleted..!");
     axios
       .delete(`/Customers/DeleteCustomer/${id}`)
       .then(function (res) {

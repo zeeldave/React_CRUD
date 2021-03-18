@@ -6,7 +6,7 @@ const DeleteStoreModal = (props) => {
   const { open, toggleDeleteModal, fetchData, store } = props;
 
   const deleteStore = (id) => {
-    alert("If Store is existing in Sales can't get Deleted..!");
+    // alert("If Store is existing in Sales can't get Deleted..!");
     axios
     .delete(`/Stores/DeleteStore/${id}`)
       .then(function (res) {
