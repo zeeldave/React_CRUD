@@ -3,21 +3,26 @@ import { Label, Form, Button, Header, Image, Modal, Table } from "semantic-ui-re
 import axios from "axios";
 
 const DeleteCustomerModal = (props) => {
-  const { open, toggleDeleteModal, fetchData, customer } = props;
+  const { open, toggleDeleteModal, fetchData, customer, sales } = props;
 
-  const deleteCustomer = (id) => {
-    // alert("If Customer is existing in Sales can't get Deleted..!");
-    axios
-      .delete(`/Customers/DeleteCustomer/${id}`)
-      .then(function (res) {
-        console.log(res);
-        fetchData();
-        toggleDeleteModal();
-      })
-      .catch(function (err) {
-        console.log(err);
-      });
-  };
+  const deleteCustomer = (id) => 
+  {   
+        axios
+        .delete(`/Customers/DeleteCustomer/${id}`)
+        .then(function (res) {
+          console.log(res);
+          fetchData();
+          toggleDeleteModal();
+        })
+        .catch(function (err) {
+          alert("Customer existing in sales so can not get deleted..!!");
+          console.log(err.response.data);
+        });
+};
+
+
+
+   
 
   return (
     <Modal
@@ -48,13 +53,25 @@ const DeleteCustomerModal = (props) => {
         <Button color='black' onClick={() => toggleDeleteModal()}>
           Cancel
         </Button>
-        <Button
-          content="Yes"
-          color='black'
-          icon='delete'
-          onClick={() => deleteCustomer(customer.id)}
-          negative
-        />
+        
+        {/* {sales.map((s) => {
+          // debugger;
+          console.log(customer.id);
+          if(customer.id==s.customer.id)
+          {
+       alert("Can not get deleted..");
+ } 
+})} */}
+
+  <Button
+  content="Yes"
+  color='black'
+  icon='delete'
+  onClick={() => deleteCustomer(customer.id)}
+  negative
+/>
+ 
+      
       </Modal.Actions>
     </Modal>
  

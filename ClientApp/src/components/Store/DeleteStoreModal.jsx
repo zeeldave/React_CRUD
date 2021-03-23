@@ -15,6 +15,7 @@ const DeleteStoreModal = (props) => {
         toggleDeleteModal();
       })
       .catch(function (err) {
+        alert("Store existing in sales so can not get deleted..!!");
         console.log(err);
       });
   };

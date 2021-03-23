@@ -45,7 +45,7 @@ const DeleteSalesModal = (props) => {
           Cancel
         </Button>
         <Button
-          content="No"
+          content="Yes"
           color="black"
           icon="checkmark"
           onClick={() => deleteSales(sale.id)}

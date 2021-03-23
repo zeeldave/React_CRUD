@@ -27,11 +27,13 @@ export class Customer extends Component {
       totalCustomersRec: 0,
       currentPage: 1,
       totalPages: 1,
+      sales: [],
     };
   }
 
   componentDidMount() {
     this.fetchData();
+    this.fetchSalesData();
   }
 
   fetchData = () => {
@@ -61,6 +63,21 @@ export class Customer extends Component {
       });
   };
 
+  fetchSalesData = () => {
+    axios
+      .get("/Sales/GetSales/")
+      .then((res) => {
+        console.log(res.data);
+        this.setState({
+          sales: res.data,
+          loaded: true,
+        });
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  };
+
   toggleModal = () => {
     this.setState({
       openCreateModal: !this.state.openCreateModal,
@@ -74,8 +91,9 @@ export class Customer extends Component {
     console.log("Customers:toggleDeleteModal");
   };
 
-  setStateDeleteModal = (customer) => {
+  setStateDeleteModal = (customer, a) => {
     this.setState({ customer: customer });
+    // this.checkDelete(a);
     console.log(
       "Customers:setStateDeleteModal:Name: " +
         customer.name +
@@ -118,6 +136,11 @@ export class Customer extends Component {
     );
   };
 
+  // checkDelete = (id) => {
+  //  let newId= this.state.sales.filter(sales=> sales.customerId !== id)
+  //  this.setState({sales:newId})
+  // };
+
   render() {
     const customers = this.state.customers;
     const loaded = this.state.loaded;
@@ -125,9 +148,10 @@ export class Customer extends Component {
     const openUpdateModal = this.state.openUpdateModal;
     const openDeleteModal = this.state.openDeleteModal;
     const customer = this.state.customer;
+    const sales = this.state.sales;
     const totalCustomersRec = this.state.totalCustomersRec;
     const currentPage = this.state.currentPage;
-  
+
     if (loaded) {
       return (
         <div>
@@ -149,6 +173,7 @@ export class Customer extends Component {
             toggleDeleteModal={this.toggleDeleteModal}
             fetchData={this.fetchData}
             customer={customer}
+            sales={sales}
           />
 
           <h1>Customers</h1>
@@ -167,7 +192,6 @@ export class Customer extends Component {
             <Table.Body>
               {customers.map((c, index) => {
                 if (index >= currentPage * 3 - 3 && index < currentPage * 3) {
-                  console.log("inside if: " + index);
                   return (
                     <Table.Row key={c.id}>
                       <Table.Cell>{c.name}</Table.Cell>
@@ -182,7 +206,15 @@ export class Customer extends Component {
                           <Icon name="edit" />
                           Update
                         </Button>
+{/* 
+                        {sales.filter((s) => {
+                          if (customer.id === s.customerId) {
+                            alert("Can not get Deleted...! ");
+                          }
+                        })} */}
+
                         <Button
+                          id="delete"
                           icon
                           labelPosition="right"
                           color="red"
